@@ -1,6 +1,9 @@
 package oauth2
 
-import "red-auth/app/domain"
+import (
+	"context"
+	"red-auth/app/domain"
+)
 
 
 type oauth2AuthRepo struct {
@@ -13,11 +16,11 @@ func NewOAuth2AuthRepository() domain.AuthRepository {
 	}
 }
 
-func (o oauth2AuthRepo) GetAuthUrl(authType domain.AuthType) string {
+func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {
 	panic("implement me")
 }
 
-func (o oauth2AuthRepo) Auth(requester domain.Requester) (domain.Resident, error) {
+func (o oauth2AuthRepo) Auth(ctx context.Context, requester domain.Requester) (domain.Resident, error) {
 	panic("implement me")
 
 	//TODO: Redirect

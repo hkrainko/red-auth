@@ -1,15 +1,16 @@
 package domain
 
+import "context"
 
 type AuthType string
 
 
 type AuthRepository interface {
-	Auth(requester Requester) (Resident, error)
-	GetAuthUrl(authType AuthType) string
+	Auth(ctx context.Context, requester Requester) (Resident, error)
+	GetAuthUrl(ctx context.Context, authType AuthType) (string, error)
 }
 
 type AuthUseCase interface {
-	Auth(requester Requester) (Resident, error)
-	GetAuthUrl(authType AuthType) string
+	Auth(ctx context.Context, requester Requester) (Resident, error)
+	GetAuthUrl(ctx context.Context, authType AuthType) (string, error)
 }

@@ -1,5 +1,6 @@
 package domain
 
+import "context"
 
 type Requester struct {
 	AuthType string
@@ -7,5 +8,5 @@ type Requester struct {
 }
 
 type RequesterRepository interface {
-	GetAuthURL(authType AuthType) string
+	GetAuthURL(ctx context.Context, authType AuthType) string
 }
