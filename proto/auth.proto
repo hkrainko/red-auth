@@ -1,4 +1,4 @@
-//cmd: protoc --go_out=paths=source_relative:. -I . auth.proto
+//cmd: protoc -I=proto/ --go_out=proto/ proto/auth.proto
 syntax = "proto3";
 
 option go_package = ".;proto";
