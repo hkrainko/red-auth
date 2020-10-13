@@ -1,0 +1,23 @@
+//cmd: protoc --go_out=paths=source_relative:. -I . auth.proto
+syntax = "proto3";
+
+option go_package = ".;proto";
+
+service AuthService {
+  rpc GetAuthUrl (GetAuthUrlRequest) returns (GetAuthUrlResponse);
+}
+
+message GetAuthUrlRequest {
+  string authType = 1;
+
+  enum AuthType {
+    LOCAL = 0;
+    FACEBOOK = 1;
+    GOOGLE = 2;
+    TWITTER = 3;
+  }
+}
+
+message GetAuthUrlResponse {
+  string authUrl = 1;
+}
