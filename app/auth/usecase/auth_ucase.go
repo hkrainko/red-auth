@@ -9,7 +9,7 @@ type authUsecase struct {
 	authRepo domain.AuthRepository
 }
 
-func NewArtistUsecase(repo domain.AuthRepository) domain.AuthUseCase {
+func NewAuthUsecase(repo domain.AuthRepository) domain.AuthUseCase {
 	return &authUsecase{
 		authRepo: repo,
 	}
@@ -20,6 +20,6 @@ func (a authUsecase) Auth(ctx context.Context, requester domain.Requester) (doma
 }
 
 func (a authUsecase) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {
-	panic("implement me")
+	return a.authRepo.GetAuthUrl(ctx, authType)
 }
 

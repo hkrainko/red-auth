@@ -1,34 +1,29 @@
 package gRPC
 
 import (
-	"github.com/gin-gonic/gin"
-	"google.golang.org/grpc"
+	"context"
 	"red-auth/app/domain"
+	pb "red-auth/proto"
 )
 
 type AuthController struct{
-	grpcConn *grpc.ClientConn
 	authUsecase domain.AuthUseCase
+	pb.UnimplementedAuthServiceServer
 }
 
-func NewAuthController(grpcConn *grpc.ClientConn, usecase domain.AuthUseCase) AuthController {
+func NewAuthController(usecase domain.AuthUseCase) AuthController {
 	return AuthController{
-		grpcConn: grpcConn,
 		authUsecase: usecase,
 	}
 }
 
-func (a AuthController) GetAuthUrl(c *gin.Context) {
-	authType := c.PostForm("authType")
-	if authType == "" {
-		return
-	}
-	url, err := a.authUsecase.GetAuthUrl(c, domain.AuthType(authType))
+func (a AuthController) GetAuthUrl(ctx context.Context, request *pb.GetAuthUrlRequest) (*pb.GetAuthUrlResponse, error) {
+	url, err := a.authUsecase.GetAuthUrl(ctx, domain.AuthType(request.AuthType))
 	if err != nil {
-		return
+		return nil, err
 	}
-
-
-
+	return &pb.GetAuthUrlResponse{
+		AuthUrl: url,
+	}, nil
 }
 

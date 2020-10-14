@@ -2,6 +2,7 @@ package oauth2
 
 import (
 	"context"
+	"fmt"
 	"red-auth/app/domain"
 )
 
@@ -17,7 +18,7 @@ func NewOAuth2AuthRepository() domain.AuthRepository {
 }
 
 func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {
-	panic("implement me")
+	return fmt.Sprintf("red-auth:%v", string(authType)), nil
 }
 
 func (o oauth2AuthRepo) Auth(ctx context.Context, requester domain.Requester) (domain.Resident, error) {

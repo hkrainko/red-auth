@@ -1,36 +1,15 @@
+//+build wireinject
+
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/google/wire"
+	auth_deliv "red-auth/app/auth/delivery/gRPC"
+	auth_repo "red-auth/app/auth/repository/oauth2"
+	auth_ucase "red-auth/app/auth/usecase"
+)
 
-func main() {
-	//userAuth := jwtgo.NewJwtGoAuth("This_is_an_key")
-	//repo := mongo.NewUserRepository("mongodb://localhost:27017")
-	//defer repo.Disconnect()
-
-	r := gin.Default()
-	r.GET("ping", ping)
-
-	//artistGroup := r.Group("/artist")
-	//{
-	//	ctr := InitArtistController()
-	//	artistGroup.POST("/getArtist", ctr.GetArtist)
-	//}
-	//
-	//artworkGroup := r.Group("/artwork")
-	//{
-	//	ctr := InitArtworkController()
-	//	artworkGroup.POST("/getArtwork", ctr.GetArtwork)
-	//}
-
-
-
-	err := r.Run(":9002")
-	print(err)
-}
-
-//============================================
-func ping(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+func InitAuthController() auth_deliv.AuthController {
+	wire.Build(auth_deliv.NewAuthController, auth_ucase.NewAuthUsecase, auth_repo.NewOAuth2AuthRepository)
+	return auth_deliv.AuthController{}
 }
