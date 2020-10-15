@@ -2,7 +2,6 @@ package oauth2
 
 import (
 	"context"
-	"fmt"
 	"red-auth/app/domain"
 )
 
@@ -18,7 +17,16 @@ func NewOAuth2AuthRepository() domain.AuthRepository {
 }
 
 func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {
-	return fmt.Sprintf("red-auth:%v", string(authType)), nil
+	//return fmt.Sprintf("red-auth:%v", string(authType)), nil
+
+	switch authType {
+	case "Google":
+		url := googleOauthConfig.AuthCodeURL("pseudo-random")
+		return url, nil
+	default:
+		break
+	}
+	return "", domain.NewAuthTypeNotFoundError()
 }
 
 func (o oauth2AuthRepo) Auth(ctx context.Context, requester domain.Requester) (domain.Resident, error) {
