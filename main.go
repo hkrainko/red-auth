@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"google.golang.org/grpc"
-	"log"
-	"net"
+	//"google.golang.org/grpc"
+	//"log"
+	//"net"
 	pb "red-auth/proto"
 )
 
@@ -18,17 +18,29 @@ func (s *server) GetAuthUrl(ctx context.Context, request *pb.GetAuthUrlRequest) 
 }
 
 func main() {
-	lis, err := net.Listen("tcp", ":50051")
+	//lis, err := net.Listen("tcp", ":50051")
+	//r := gin.Default()
+	//
+	//s := grpc.NewServer()
+	//
+	//pb.RegisterAuthServiceServer(s, InitAuthController())
+	//
+	//if err := s.Serve(lis); err != nil {
+	//	log.Fatalf("failed to listen: %v", err)
+	//}
+	//
+	//err := r.Run(":9002")
+	//print(err)
+
 	r := gin.Default()
 
-	s := grpc.NewServer()
+	authGroup := r.Group("/auth")
+	{
+		ctr := InitAuthController()
+		authGroup.POST("/getAuthUrl", ctr.GetAuthUrl)
 
-	pb.RegisterAuthServiceServer(s, InitAuthController())
-
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to listen: %v", err)
 	}
 
-	err = r.Run(":9002")
+	err := r.Run(":9002")
 	print(err)
 }

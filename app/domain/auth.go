@@ -38,8 +38,8 @@ type AuthTypeNotFoundError struct {
 func NewAuthTypeNotFoundError() *AuthTypeNotFoundError {
 	return &AuthTypeNotFoundError{
 		AuthError{
-			msg: "AuthTypeNotFoundError",
-			err: errors.New(""),
+			msg: "authTypeNotFoundError",
+			err: errors.New("auth error"),
 		},
 	}
 }
