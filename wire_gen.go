@@ -15,7 +15,7 @@ import (
 
 func InitAuthController() http.AuthController {
 	authRepository := oauth2.NewOAuth2AuthRepository()
-	authUseCase := usecase.NewAuthUsecase(authRepository)
+	authUseCase := usecase.NewAuthUseCase(authRepository)
 	authController := http.NewAuthController(authUseCase)
 	return authController
 }

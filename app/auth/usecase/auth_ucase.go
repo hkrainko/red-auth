@@ -9,17 +9,16 @@ type authUsecase struct {
 	authRepo domain.AuthRepository
 }
 
-func NewAuthUsecase(repo domain.AuthRepository) domain.AuthUseCase {
+func NewAuthUseCase(repo domain.AuthRepository) domain.AuthUseCase {
 	return &authUsecase{
 		authRepo: repo,
 	}
 }
 
-func (a authUsecase) Auth(ctx context.Context, requester domain.Requester) (domain.Resident, error) {
+func (a authUsecase) HandleAuthCallBack(ctx context.Context, authCallBack domain.AuthCallBack) (error) {
 	panic("implement me")
 }
 
 func (a authUsecase) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {
 	return a.authRepo.GetAuthUrl(ctx, authType)
 }
-

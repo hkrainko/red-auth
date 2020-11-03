@@ -2,6 +2,7 @@ package oauth2
 
 import (
 	"context"
+	"red-auth/app/auth/repository/oauth2/google"
 	"red-auth/app/domain"
 )
 
@@ -21,7 +22,7 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType
 
 	switch authType {
 	case "Google":
-		url := googleOauthConfig.AuthCodeURL("pseudo-random")
+		url := google.GoogleOauthConfig.AuthCodeURL("pseudo-random")
 		return url, nil
 	default:
 		break
@@ -29,10 +30,12 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType
 	return "", domain.NewAuthTypeNotFoundError()
 }
 
-func (o oauth2AuthRepo) Auth(ctx context.Context, requester domain.Requester) (domain.Resident, error) {
-	panic("implement me")
-
-	//TODO: Redirect
-
-
+func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack domain.AuthCallBack) (error) {
+	switch authCallBack.AuthType {
+	case "Google":
+		google.GetUserInfo(authCallBack.Code, authCallBack.State)
+	default:
+		break
+	}
+	return domain.NewAuthTypeNotFoundError()
 }

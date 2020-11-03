@@ -9,12 +9,12 @@ type AuthType string
 
 
 type AuthRepository interface {
-	Auth(ctx context.Context, requester Requester) (Resident, error)
+	HandleAuthCallBack(ctx context.Context, authCallBack AuthCallBack) (error)
 	GetAuthUrl(ctx context.Context, authType AuthType) (string, error)
 }
 
 type AuthUseCase interface {
-	Auth(ctx context.Context, requester Requester) (Resident, error)
+	HandleAuthCallBack(ctx context.Context, authCallBack AuthCallBack) (error)
 	GetAuthUrl(ctx context.Context, authType AuthType) (string, error)
 }
 

@@ -10,6 +10,6 @@ import (
 )
 
 func InitAuthController() auth_deliv.AuthController {
-	wire.Build(auth_deliv.NewAuthController, auth_ucase.NewAuthUsecase, auth_repo.NewOAuth2AuthRepository)
+	wire.Build(auth_deliv.NewAuthController, auth_ucase.NewAuthUseCase, auth_repo.NewOAuth2AuthRepository)
 	return auth_deliv.AuthController{}
 }

@@ -28,3 +28,19 @@ func (a AuthController) GetAuthUrl(c *gin.Context) {
 	}
 	c.JSON(200, get_auth_url.NewResponse(url))
 }
+
+func (a AuthController) CallBack(c *gin.Context) {
+	state := c.PostForm("state")
+	code := c.PostForm("code")
+	if state == "" || code == "0" {
+		return
+	}
+	err := a.authUsecase.HandleAuthCallBack(c, domain.AuthCallBack{
+		State: state,
+		Code:  code,
+	})
+	if err != nil {
+		return
+	}
+	//c.JSON(200, get_auth_url.NewResponse(url))
+}
