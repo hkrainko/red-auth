@@ -38,7 +38,7 @@ func main() {
 	{
 		ctr := InitAuthController()
 		authGroup.POST("/getAuthUrl", ctr.GetAuthUrl)
-
+		authGroup.GET("/callback", ctr.CallBack)
 	}
 
 	err := r.Run(":9002")

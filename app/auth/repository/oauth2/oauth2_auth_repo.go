@@ -33,7 +33,7 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType
 func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack domain.AuthCallBack) (error) {
 	switch authCallBack.AuthType {
 	case "Google":
-		google.GetUserInfo(authCallBack.Code, authCallBack.State)
+		google.GetUserInfo(authCallBack.State, authCallBack.Code)
 	default:
 		break
 	}

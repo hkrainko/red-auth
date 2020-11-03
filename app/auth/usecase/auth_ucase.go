@@ -16,7 +16,7 @@ func NewAuthUseCase(repo domain.AuthRepository) domain.AuthUseCase {
 }
 
 func (a authUsecase) HandleAuthCallBack(ctx context.Context, authCallBack domain.AuthCallBack) (error) {
-	panic("implement me")
+	return a.authRepo.HandleAuthCallBack(ctx, authCallBack)
 }
 
 func (a authUsecase) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {

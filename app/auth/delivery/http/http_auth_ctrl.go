@@ -30,12 +30,13 @@ func (a AuthController) GetAuthUrl(c *gin.Context) {
 }
 
 func (a AuthController) CallBack(c *gin.Context) {
-	state := c.PostForm("state")
-	code := c.PostForm("code")
+	state := c.Query("state")
+	code := c.Query("code")
 	if state == "" || code == "0" {
 		return
 	}
 	err := a.authUsecase.HandleAuthCallBack(c, domain.AuthCallBack{
+		AuthType: "Google",
 		State: state,
 		Code:  code,
 	})
