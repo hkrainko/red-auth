@@ -2,6 +2,7 @@ package oauth2
 
 import (
 	"context"
+	"red-auth/app/auth/repository/oauth2/facebook"
 	"red-auth/app/auth/repository/oauth2/google"
 	"red-auth/app/domain"
 )
@@ -22,7 +23,10 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType
 
 	switch authType {
 	case "Google":
-		url := google.GoogleOauthConfig.AuthCodeURL("pseudo-random")
+		url := google.OauthConfig.AuthCodeURL("pseudo-random")
+		return url, nil
+	case "Facebook":
+		url := facebook.OauthConfig.AuthCodeURL("pseudo-random")
 		return url, nil
 	default:
 		break
@@ -34,6 +38,8 @@ func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack dom
 	switch authCallBack.AuthType {
 	case "Google":
 		google.GetUserInfo(authCallBack.State, authCallBack.Code)
+	case "Facebook":
+		facebook.GetUserInfo(authCallBack.State, authCallBack.Code)
 	default:
 		break
 	}

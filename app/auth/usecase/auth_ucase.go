@@ -10,7 +10,7 @@ type authUsecase struct {
 }
 
 func NewAuthUseCase(repo domain.AuthRepository) domain.AuthUseCase {
-	return &authUsecase{
+	return &authUsecase {
 		authRepo: repo,
 	}
 }

@@ -18,7 +18,7 @@ func NewAuthController(useCase domain.AuthUseCase) AuthController {
 }
 
 func (a AuthController) GetAuthUrl(c *gin.Context) {
-	authType := c.PostForm("authType")
+	authType := c.PostForm("auth_type")
 	if authType == "" {
 		return
 	}
@@ -32,11 +32,12 @@ func (a AuthController) GetAuthUrl(c *gin.Context) {
 func (a AuthController) CallBack(c *gin.Context) {
 	state := c.Query("state")
 	code := c.Query("code")
+	authType := c.Query("auth_type")
 	if state == "" || code == "0" {
 		return
 	}
 	err := a.authUsecase.HandleAuthCallBack(c, domain.AuthCallBack{
-		AuthType: "Google",
+		AuthType: domain.AuthType(authType),
 		State: state,
 		Code:  code,
 	})

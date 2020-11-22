@@ -1,10 +1,10 @@
-package google
+package facebook
 
 import (
 	"fmt"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
+	"golang.org/x/oauth2/facebook"
 	"io/ioutil"
 	"net/http"
 )
@@ -15,11 +15,11 @@ var (
 
 func init() {
 	OauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:9002/auth/callback?auth_type=Google",
-		ClientID:     "601833756814-1n1uo2jp77sp888mjsrsl1fmru69kvhb.apps.googleusercontent.com",
-		ClientSecret: "yyZUseQoTSYS8tT0MP-M9MrL",
-		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
-		Endpoint:     google.Endpoint,
+		RedirectURL:  "http://localhost:9002/auth/callback?auth_type=Facebook",
+		ClientID:     "375183940527894",
+		ClientSecret: "d90ae5b9183d30d3cc206c2286b15e90",
+		Scopes:       []string{"public_profile"},
+		Endpoint:     facebook.Endpoint,
 	}
 }
 
@@ -31,7 +31,7 @@ func GetUserInfo(state string, code string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
-	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	response, err := http.Get("https://graph.facebook.com/me?access_token=" + token.AccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
 	}
@@ -42,4 +42,3 @@ func GetUserInfo(state string, code string) ([]byte, error) {
 	}
 	return contents, nil
 }
-
