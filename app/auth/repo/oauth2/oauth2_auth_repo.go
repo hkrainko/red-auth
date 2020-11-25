@@ -2,8 +2,8 @@ package oauth2
 
 import (
 	"context"
-	"red-auth/app/auth/repository/oauth2/facebook"
-	"red-auth/app/auth/repository/oauth2/google"
+	"red-auth/app/auth/repo/oauth2/facebook"
+	"red-auth/app/auth/repo/oauth2/google"
 	"red-auth/app/domain/auth"
 )
 
@@ -34,7 +34,7 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType auth.Type) (str
 	return "", auth.NewAuthTypeNotFoundError()
 }
 
-func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack auth.CallBack) (error) {
+func (o oauth2AuthRepo) GetAuthorizedUserInfo(ctx context.Context, authCallBack auth.CallBack) (error) {
 	switch authCallBack.AuthType {
 	case "Google":
 		google.GetUserInfo(authCallBack.State, authCallBack.Code)

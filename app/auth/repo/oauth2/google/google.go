@@ -1,12 +1,14 @@
 package google
 
 import (
+	"encoding/json"
 	"fmt"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
 	"net/http"
+	"red-auth/app/domain/auth"
 )
 
 var (
@@ -23,7 +25,7 @@ func init() {
 	}
 }
 
-func GetUserInfo(state string, code string) ([]byte, error) {
+func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 	if state != "pseudo-random" {
 		return nil, fmt.Errorf("invalid oauth state")
 	}
@@ -40,6 +42,26 @@ func GetUserInfo(state string, code string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
 	}
-	return contents, nil
+	fmt.Println(string(contents))
+	googleUserInfo := googleAuthorizedUserInfo{}
+	err = json.Unmarshal(contents, &googleUserInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	return googleUserInfo.toAuthorizedUserInfo(), nil
 }
 
+type googleAuthorizedUserInfo struct {
+	ID       string `json:"id"`
+	Email    string `json:"email"`
+	PhotoUrl string `json:"picture"`
+}
+
+func (g *googleAuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
+	return &auth.AuthorizedUserInfo{
+		ID:       g.ID,
+		Email:    g.Email,
+		PhotoUrl: g.PhotoUrl,
+	}
+}

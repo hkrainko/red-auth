@@ -7,7 +7,7 @@ package main
 
 import (
 	"red-auth/app/auth/delivery/http"
-	"red-auth/app/auth/repository/oauth2"
+	"red-auth/app/auth/repo/oauth2"
 	"red-auth/app/auth/usecase"
 )
 

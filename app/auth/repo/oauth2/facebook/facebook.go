@@ -1,12 +1,14 @@
 package facebook
 
 import (
+	"encoding/json"
 	"fmt"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/facebook"
 	"io/ioutil"
 	"net/http"
+	"red-auth/app/domain/auth"
 )
 
 var (
@@ -23,7 +25,7 @@ func init() {
 	}
 }
 
-func GetUserInfo(state string, code string) ([]byte, error) {
+func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 	if state != "pseudo-random" {
 		return nil, fmt.Errorf("invalid oauth state")
 	}
@@ -31,7 +33,7 @@ func GetUserInfo(state string, code string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
-	response, err := http.Get("https://graph.facebook.com/me?access_token=" + token.AccessToken)
+	response, err := http.Get("https://graph.facebook.com/v9.0/me/picture?access_token=" + token.AccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
 	}
@@ -40,5 +42,21 @@ func GetUserInfo(state string, code string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
 	}
-	return contents, nil
+	fmt.Println(string(contents))
+	facebookUserInfo := facebookAuthorizedUserInfo{}
+	err = json.Unmarshal(contents, &facebookUserInfo)
+	return facebookUserInfo.toAuthorizedUserInfo(), nil
+}
+
+type facebookAuthorizedUserInfo struct {
+	ID       string `json:"id"`
+	Name    string `json:"name"`
+	PhotoUrl string `json:"picture"`
+}
+
+func (g *facebookAuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
+	return &auth.AuthorizedUserInfo{
+		ID:       g.ID,
+		PhotoUrl: g.PhotoUrl,
+	}
 }
