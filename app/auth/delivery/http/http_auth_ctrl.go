@@ -3,16 +3,16 @@ package http
 import (
 	"github.com/gin-gonic/gin"
 	"red-auth/app/auth/delivery/get-auth-url"
-	"red-auth/app/domain"
+	"red-auth/app/domain/auth"
 )
 
 type AuthController struct{
-	authUsecase domain.AuthUseCase
+	authUseCase auth.UseCase
 }
 
-func NewAuthController(useCase domain.AuthUseCase) AuthController {
+func NewAuthController(useCase auth.UseCase) AuthController {
 	return AuthController{
-		authUsecase: useCase,
+		authUseCase: useCase,
 	}
 
 }
@@ -22,7 +22,7 @@ func (a AuthController) GetAuthUrl(c *gin.Context) {
 	if authType == "" {
 		return
 	}
-	url, err := a.authUsecase.GetAuthUrl(c, domain.AuthType(authType))
+	url, err := a.authUseCase.GetAuthUrl(c, auth.Type(authType))
 	if err != nil {
 		return
 	}
@@ -36,10 +36,10 @@ func (a AuthController) CallBack(c *gin.Context) {
 	if state == "" || code == "0" {
 		return
 	}
-	err := a.authUsecase.HandleAuthCallBack(c, domain.AuthCallBack{
-		AuthType: domain.AuthType(authType),
-		State: state,
-		Code:  code,
+	err := a.authUseCase.HandleAuthCallBack(c, auth.CallBack{
+		AuthType: auth.Type(authType),
+		State:    state,
+		Code:     code,
 	})
 	if err != nil {
 		return

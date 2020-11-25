@@ -4,7 +4,7 @@ import (
 	"context"
 	"red-auth/app/auth/repository/oauth2/facebook"
 	"red-auth/app/auth/repository/oauth2/google"
-	"red-auth/app/domain"
+	"red-auth/app/domain/auth"
 )
 
 
@@ -12,13 +12,13 @@ type oauth2AuthRepo struct {
 
 }
 
-func NewOAuth2AuthRepository() domain.AuthRepository {
+func NewOAuth2AuthRepository() auth.Repo {
 	return &oauth2AuthRepo{
 		
 	}
 }
 
-func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType) (string, error) {
+func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType auth.Type) (string, error) {
 	//return fmt.Sprintf("red-auth:%v", string(authType)), nil
 
 	switch authType {
@@ -31,10 +31,10 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType domain.AuthType
 	default:
 		break
 	}
-	return "", domain.NewAuthTypeNotFoundError()
+	return "", auth.NewAuthTypeNotFoundError()
 }
 
-func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack domain.AuthCallBack) (error) {
+func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack auth.CallBack) (error) {
 	switch authCallBack.AuthType {
 	case "Google":
 		google.GetUserInfo(authCallBack.State, authCallBack.Code)
@@ -43,5 +43,5 @@ func (o oauth2AuthRepo) HandleAuthCallBack(ctx context.Context, authCallBack dom
 	default:
 		break
 	}
-	return domain.NewAuthTypeNotFoundError()
+	return auth.NewAuthTypeNotFoundError()
 }

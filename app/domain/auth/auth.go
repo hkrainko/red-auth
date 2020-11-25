@@ -1,22 +1,10 @@
-package domain
+package auth
 
 import (
-	"context"
 	"errors"
 )
 
-type AuthType string
-
-
-type AuthRepository interface {
-	HandleAuthCallBack(ctx context.Context, authCallBack AuthCallBack) (error)
-	GetAuthUrl(ctx context.Context, authType AuthType) (string, error)
-}
-
-type AuthUseCase interface {
-	HandleAuthCallBack(ctx context.Context, authCallBack AuthCallBack) (error)
-	GetAuthUrl(ctx context.Context, authType AuthType) (string, error)
-}
+type Type string
 
 type AuthError struct {
 	msg string

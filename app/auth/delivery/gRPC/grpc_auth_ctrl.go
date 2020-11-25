@@ -2,23 +2,23 @@ package gRPC
 
 import (
 	"context"
-	"red-auth/app/domain"
+	"red-auth/app/domain/auth"
 	pb "red-auth/proto"
 )
 
 type AuthController struct{
-	authUsecase domain.AuthUseCase
+	authUseCase auth.UseCase
 	pb.UnimplementedAuthServiceServer
 }
 
-func NewAuthController(usecase domain.AuthUseCase) AuthController {
+func NewAuthController(useCase auth.UseCase) AuthController {
 	return AuthController{
-		authUsecase: usecase,
+		authUseCase: useCase,
 	}
 }
 
 func (a AuthController) GetAuthUrl(ctx context.Context, request *pb.GetAuthUrlRequest) (*pb.GetAuthUrlResponse, error) {
-	url, err := a.authUsecase.GetAuthUrl(ctx, domain.AuthType(request.AuthType))
+	url, err := a.authUseCase.GetAuthUrl(ctx, auth.Type(request.AuthType))
 	if err != nil {
 		return nil, err
 	}
