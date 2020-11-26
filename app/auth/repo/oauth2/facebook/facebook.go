@@ -20,7 +20,7 @@ func init() {
 		RedirectURL:  "http://localhost:9002/auth/callback?auth_type=Facebook",
 		ClientID:     "375183940527894",
 		ClientSecret: "d90ae5b9183d30d3cc206c2286b15e90",
-		Scopes:       []string{"public_profile", "user_birthday", "email"},
+		Scopes:       []string{"public_profile", "user_birthday", "email", "user_gender"},
 		Endpoint:     facebook.Endpoint,
 	}
 }
@@ -33,7 +33,7 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
-	response, err := http.Get("https://graph.facebook.com/v9.0/me?fields=id,name,birthday,email,picture&access_token=" + token.AccessToken)
+	response, err := http.Get("https://graph.facebook.com/v9.0/me?fields=id,name,birthday,email,gender,picture&access_token=" + token.AccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
 	}
@@ -53,6 +53,7 @@ type facebookAuthorizedUserInfo struct {
 	Name     string          `json:"name"`
 	Email    string          `json:"email"`
 	Birthday string          `json:"birthday"`
+	Gender   string          `json:"gender"`
 	Picture  facebookPicture `json:"picture"`
 }
 
