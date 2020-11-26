@@ -20,7 +20,7 @@ func init() {
 		RedirectURL:  "http://localhost:9002/auth/callback?auth_type=Facebook",
 		ClientID:     "375183940527894",
 		ClientSecret: "d90ae5b9183d30d3cc206c2286b15e90",
-		Scopes:       []string{"public_profile"},
+		Scopes:       []string{"public_profile", "user_birthday", "email"},
 		Endpoint:     facebook.Endpoint,
 	}
 }
@@ -33,7 +33,7 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
-	response, err := http.Get("https://graph.facebook.com/v9.0/me/picture?access_token=" + token.AccessToken)
+	response, err := http.Get("https://graph.facebook.com/v9.0/me?fields=id,name,birthday,email,picture&access_token=" + token.AccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
 	}
@@ -49,14 +49,28 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 }
 
 type facebookAuthorizedUserInfo struct {
-	ID       string `json:"id"`
-	Name    string `json:"name"`
-	PhotoUrl string `json:"picture"`
+	ID       string          `json:"id"`
+	Name     string          `json:"name"`
+	Email    string          `json:"email"`
+	Birthday string          `json:"birthday"`
+	Picture  facebookPicture `json:"picture"`
+}
+
+type facebookPicture struct {
+	Data facebookPictureData `json:"data"`
+}
+
+type facebookPictureData struct {
+	Height       float64 `json:"height"`
+	Width        float64 `json:"width"`
+	IsSilhouette bool    `json:"is_silhouette"`
+	URL          string  `json:"url"`
 }
 
 func (g *facebookAuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
 	return &auth.AuthorizedUserInfo{
 		ID:       g.ID,
-		PhotoUrl: g.PhotoUrl,
+		Email:    g.Email,
+		PhotoUrl: g.Picture.Data.URL,
 	}
 }
