@@ -6,16 +6,16 @@
 package main
 
 import (
-	"red-auth/app/auth/delivery/http"
+	"red-auth/app/auth/delivery/gRPC"
 	"red-auth/app/auth/repo/oauth2"
 	"red-auth/app/auth/usecase"
 )
 
 // Injectors from wire.go:
 
-func InitAuthController() http.AuthController {
-	authRepository := oauth2.NewOAuth2AuthRepository()
-	authUseCase := usecase.NewAuthUseCase(authRepository)
-	authController := http.NewAuthController(authUseCase)
+func InitAuthController() gRPC.AuthController {
+	repo := oauth2.NewOAuth2AuthRepository()
+	useCase := usecase.NewAuthUseCase(repo)
+	authController := gRPC.NewAuthController(useCase)
 	return authController
 }

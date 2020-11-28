@@ -27,3 +27,22 @@ func (a AuthController) GetAuthUrl(ctx context.Context, request *pb.GetAuthUrlRe
 	}, nil
 }
 
+func (a AuthController) CallBack(ctx context.Context, request *pb.CallBackRequest) (*pb.CallBackResponse, error) {
+	info, err := a.authUseCase.HandleAuthCallBack(ctx, auth.CallBack{
+		AuthType: auth.Type(request.AuthType),
+		State:    request.State,
+		Code:     request.Code,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CallBackResponse{
+		Id:       info.ID,
+		AuthType: info.AuthType,
+		Email:    info.Email,
+		Birthday: info.Birthday.Format("20160102"),
+		Gender:   info.Gender,
+		PhotoUrl: info.PhotoURL,
+	}, nil
+}
+
