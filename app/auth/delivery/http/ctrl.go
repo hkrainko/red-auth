@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	call_back "red-auth/app/auth/delivery/call-back"
 	"red-auth/app/auth/delivery/get-auth-url"
 	"red-auth/app/domain/auth"
 )
@@ -36,7 +37,7 @@ func (a AuthController) CallBack(c *gin.Context) {
 	if state == "" || code == "0" {
 		return
 	}
-	err := a.authUseCase.HandleAuthCallBack(c, auth.CallBack{
+	userInfo, err := a.authUseCase.HandleAuthCallBack(c, auth.CallBack{
 		AuthType: auth.Type(authType),
 		State:    state,
 		Code:     code,
@@ -44,5 +45,6 @@ func (a AuthController) CallBack(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	//c.JSON(200, get_auth_url.NewResponse(url))
+
+	c.JSON(200, call_back.NewResponse(userInfo))
 }

@@ -34,14 +34,14 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType auth.Type) (str
 	return "", auth.NewAuthTypeNotFoundError()
 }
 
-func (o oauth2AuthRepo) GetAuthorizedUserInfo(ctx context.Context, authCallBack auth.CallBack) (error) {
+func (o oauth2AuthRepo) GetAuthorizedUserInfo(ctx context.Context, authCallBack auth.CallBack) (*auth.AuthorizedUserInfo, error) {
 	switch authCallBack.AuthType {
 	case "Google":
-		google.GetUserInfo(authCallBack.State, authCallBack.Code)
+		return google.GetUserInfo(authCallBack.State, authCallBack.Code)
 	case "Facebook":
-		facebook.GetUserInfo(authCallBack.State, authCallBack.Code)
+		return facebook.GetUserInfo(authCallBack.State, authCallBack.Code)
 	default:
 		break
 	}
-	return auth.NewAuthTypeNotFoundError()
+	return nil, auth.NewAuthTypeNotFoundError()
 }

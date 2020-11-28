@@ -20,8 +20,13 @@ func init() {
 		RedirectURL:  "http://localhost:9002/auth/callback?auth_type=Google",
 		ClientID:     "601833756814-1n1uo2jp77sp888mjsrsl1fmru69kvhb.apps.googleusercontent.com",
 		ClientSecret: "yyZUseQoTSYS8tT0MP-M9MrL",
-		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
-		Endpoint:     google.Endpoint,
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.email",
+			"https://www.googleapis.com/auth/userinfo.profile",
+			"https://www.googleapis.com/auth/user.birthday.read",
+			"https://www.googleapis.com/auth/user.gender.read",
+		},
+		Endpoint: google.Endpoint,
 	}
 }
 
@@ -33,7 +38,8 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
-	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	fmt.Println(token)
+	response, err := http.Get("https://people.googleapis.com/v1/people/me?personFields=names,birthdays,photos,genders,emailAddresses&access_token=" + token.AccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
 	}
@@ -43,25 +49,11 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
 	}
 	fmt.Println(string(contents))
-	googleUserInfo := googleAuthorizedUserInfo{}
+	googleUserInfo := AuthorizedUserInfo{}
 	err = json.Unmarshal(contents, &googleUserInfo)
 	if err != nil {
 		return nil, err
 	}
 
-	return googleUserInfo.toAuthorizedUserInfo(), nil
-}
-
-type googleAuthorizedUserInfo struct {
-	ID       string `json:"id"`
-	Email    string `json:"email"`
-	PhotoUrl string `json:"picture"`
-}
-
-func (g *googleAuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
-	return &auth.AuthorizedUserInfo{
-		ID:       g.ID,
-		Email:    g.Email,
-		PhotoUrl: g.PhotoUrl,
-	}
+	return googleUserInfo.toAuthorizedUserInfo()
 }

@@ -15,13 +15,13 @@ func NewAuthUseCase(repo auth.Repo) auth.UseCase {
 	}
 }
 
-func (a authUseCase) HandleAuthCallBack(ctx context.Context, authCallBack auth.CallBack) (error) {
-
-	err := a.authRepo.GetAuthorizedUserInfo(ctx, authCallBack)
+func (a authUseCase) HandleAuthCallBack(ctx context.Context, authCallBack auth.CallBack) (*auth.AuthorizedUserInfo, error) {
+	userInfo, err := a.authRepo.GetAuthorizedUserInfo(ctx, authCallBack)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return a.authRepo.GetAuthorizedUserInfo(ctx, authCallBack)
+	//TODO: Event for new user
+	return userInfo, nil
 }
 
 func (a authUseCase) GetAuthUrl(ctx context.Context, authType auth.Type) (string, error) {

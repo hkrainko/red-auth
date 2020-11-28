@@ -43,35 +43,7 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
 	}
 	fmt.Println(string(contents))
-	facebookUserInfo := facebookAuthorizedUserInfo{}
+	facebookUserInfo := AuthorizedUserInfo{}
 	err = json.Unmarshal(contents, &facebookUserInfo)
 	return facebookUserInfo.toAuthorizedUserInfo(), nil
-}
-
-type facebookAuthorizedUserInfo struct {
-	ID       string          `json:"id"`
-	Name     string          `json:"name"`
-	Email    string          `json:"email"`
-	Birthday string          `json:"birthday"`
-	Gender   string          `json:"gender"`
-	Picture  facebookPicture `json:"picture"`
-}
-
-type facebookPicture struct {
-	Data facebookPictureData `json:"data"`
-}
-
-type facebookPictureData struct {
-	Height       float64 `json:"height"`
-	Width        float64 `json:"width"`
-	IsSilhouette bool    `json:"is_silhouette"`
-	URL          string  `json:"url"`
-}
-
-func (g *facebookAuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
-	return &auth.AuthorizedUserInfo{
-		ID:       g.ID,
-		Email:    g.Email,
-		PhotoUrl: g.Picture.Data.URL,
-	}
 }
