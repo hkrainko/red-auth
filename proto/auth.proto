@@ -5,19 +5,35 @@ option go_package = ".;proto";
 
 service AuthService {
   rpc GetAuthUrl (GetAuthUrlRequest) returns (GetAuthUrlResponse);
+  rpc CallBack (CallBackRequest) returns (CallBackResponse);
 }
 
 message GetAuthUrlRequest {
-  string authType = 1;
-
-  enum AuthType {
-    LOCAL = 0;
-    FACEBOOK = 1;
-    GOOGLE = 2;
-    TWITTER = 3;
-  }
+  AuthType authType = 1;
 }
 
 message GetAuthUrlResponse {
   string authUrl = 1;
+}
+
+message CallBackRequest {
+  string state = 1;
+  string code = 2;
+  AuthType authType = 3;
+}
+
+message CallBackResponse {
+  string id = 1;
+  string authType = 2;
+  string email = 3;
+  string birthday = 4;
+  string gender = 5;
+  string photoUrl = 6;
+}
+
+enum AuthType {
+  LOCAL = 0;
+  FACEBOOK = 1;
+  GOOGLE = 2;
+  TWITTER = 3;
 }

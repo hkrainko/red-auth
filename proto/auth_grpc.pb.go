@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	GetAuthUrl(ctx context.Context, in *GetAuthUrlRequest, opts ...grpc.CallOption) (*GetAuthUrlResponse, error)
+	CallBack(ctx context.Context, in *CallBackRequest, opts ...grpc.CallOption) (*CallBackResponse, error)
 }
 
 type authServiceClient struct {
@@ -37,11 +38,21 @@ func (c *authServiceClient) GetAuthUrl(ctx context.Context, in *GetAuthUrlReques
 	return out, nil
 }
 
+func (c *authServiceClient) CallBack(ctx context.Context, in *CallBackRequest, opts ...grpc.CallOption) (*CallBackResponse, error) {
+	out := new(CallBackResponse)
+	err := c.cc.Invoke(ctx, "/AuthService/CallBack", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
 	GetAuthUrl(context.Context, *GetAuthUrlRequest) (*GetAuthUrlResponse, error)
+	CallBack(context.Context, *CallBackRequest) (*CallBackResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -52,6 +63,9 @@ type UnimplementedAuthServiceServer struct {
 func (UnimplementedAuthServiceServer) GetAuthUrl(context.Context, *GetAuthUrlRequest) (*GetAuthUrlResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthUrl not implemented")
 }
+func (UnimplementedAuthServiceServer) CallBack(context.Context, *CallBackRequest) (*CallBackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CallBack not implemented")
+}
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
 // UnsafeAuthServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -61,7 +75,7 @@ type UnsafeAuthServiceServer interface {
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
-func RegisterAuthServiceServer(s *grpc.Server, srv AuthServiceServer) {
+func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
 	s.RegisterService(&_AuthService_serviceDesc, srv)
 }
 
@@ -83,6 +97,24 @@ func _AuthService_GetAuthUrl_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_CallBack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallBackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).CallBack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AuthService/CallBack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).CallBack(ctx, req.(*CallBackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _AuthService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "AuthService",
 	HandlerType: (*AuthServiceServer)(nil),
@@ -90,6 +122,10 @@ var _AuthService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAuthUrl",
 			Handler:    _AuthService_GetAuthUrl_Handler,
+		},
+		{
+			MethodName: "CallBack",
+			Handler:    _AuthService_CallBack_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
