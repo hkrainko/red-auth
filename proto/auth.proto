@@ -9,7 +9,7 @@ service AuthService {
 }
 
 message GetAuthUrlRequest {
-  AuthType authType = 1;
+  string authType = 1;
 }
 
 message GetAuthUrlResponse {
@@ -19,7 +19,7 @@ message GetAuthUrlResponse {
 message CallBackRequest {
   string state = 1;
   string code = 2;
-  AuthType authType = 3;
+  string authType = 3;
 }
 
 message CallBackResponse {
@@ -31,9 +31,9 @@ message CallBackResponse {
   string photoUrl = 6;
 }
 
-enum AuthType {
-  LOCAL = 0;
-  FACEBOOK = 1;
-  GOOGLE = 2;
-  TWITTER = 3;
-}
+//enum AuthType {
+//  LOCAL = 0;
+//  FACEBOOK = 1;
+//  GOOGLE = 2;
+//  TWITTER = 3;
+//}

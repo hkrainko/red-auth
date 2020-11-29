@@ -20,7 +20,6 @@ func (a authUseCase) HandleAuthCallBack(ctx context.Context, authCallBack auth.C
 	if err != nil {
 		return nil, err
 	}
-	//TODO: Event for new user
 	return userInfo, nil
 }
 
