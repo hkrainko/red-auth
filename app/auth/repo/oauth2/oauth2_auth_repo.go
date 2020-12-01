@@ -34,7 +34,7 @@ func (o oauth2AuthRepo) GetAuthUrl(ctx context.Context, authType auth.Type) (str
 	return "", auth.NewAuthTypeNotFoundError()
 }
 
-func (o oauth2AuthRepo) GetAuthorizedUserInfo(ctx context.Context, authCallBack auth.CallBack) (*auth.AuthorizedUserInfo, error) {
+func (o oauth2AuthRepo) GetAuthorizedUserInfo(ctx context.Context, authCallBack auth.CallBack) (*auth.UserInfo, error) {
 	switch authCallBack.AuthType {
 	case "Google":
 		return google.GetUserInfo(authCallBack.State, authCallBack.Code)
@@ -45,3 +45,4 @@ func (o oauth2AuthRepo) GetAuthorizedUserInfo(ctx context.Context, authCallBack 
 	}
 	return nil, auth.NewAuthTypeNotFoundError()
 }
+

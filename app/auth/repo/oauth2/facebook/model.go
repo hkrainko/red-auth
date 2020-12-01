@@ -25,7 +25,7 @@ type facebookPictureData struct {
 	URL          string  `json:"url"`
 }
 
-func (g *AuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
+func (g *AuthorizedUserInfo) toUserInfo() *auth.UserInfo {
 
 	t, _ := time.Parse("01/02/2006", g.Birthday)
 	gender := ""
@@ -38,7 +38,7 @@ func (g *AuthorizedUserInfo) toAuthorizedUserInfo() *auth.AuthorizedUserInfo {
 		gender = ""
 	}
 
-	return &auth.AuthorizedUserInfo{
+	return &auth.UserInfo{
 		ID:       g.ID,
 		AuthType: "Facebook",
 		Email:    g.Email,

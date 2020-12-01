@@ -6,7 +6,7 @@ import (
 	pb "red-auth/proto"
 )
 
-type AuthController struct{
+type AuthController struct {
 	authUseCase auth.UseCase
 	pb.UnimplementedAuthServiceServer
 }
@@ -38,6 +38,7 @@ func (a AuthController) CallBack(ctx context.Context, request *pb.CallBackReques
 	}
 	return &pb.CallBackResponse{
 		Id:       info.ID,
+		Token:    info.Token,
 		AuthType: info.AuthType,
 		Email:    info.Email,
 		Birthday: info.Birthday.Format("20160102"),
@@ -45,4 +46,3 @@ func (a AuthController) CallBack(ctx context.Context, request *pb.CallBackReques
 		PhotoUrl: info.PhotoURL,
 	}, nil
 }
-

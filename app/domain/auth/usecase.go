@@ -1,6 +1,8 @@
 package auth
 
-import "context"
+import (
+	"context"
+)
 
 type UseCase interface {
 	HandleAuthCallBack(ctx context.Context, authCallBack CallBack) (*AuthorizedUserInfo, error)

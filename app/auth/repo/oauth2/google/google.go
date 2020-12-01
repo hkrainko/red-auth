@@ -30,7 +30,7 @@ func init() {
 	}
 }
 
-func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
+func GetUserInfo(state string, code string) (*auth.UserInfo, error) {
 	if state != "pseudo-random" {
 		return nil, fmt.Errorf("invalid oauth state")
 	}
@@ -55,5 +55,5 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 		return nil, err
 	}
 
-	return googleUserInfo.toAuthorizedUserInfo()
+	return googleUserInfo.toUserInfo()
 }

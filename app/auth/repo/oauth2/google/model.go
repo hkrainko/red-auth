@@ -71,7 +71,7 @@ type Photo struct {
 }
 
 
-func (g *AuthorizedUserInfo) toAuthorizedUserInfo() (*auth.AuthorizedUserInfo, error) {
+func (g *AuthorizedUserInfo) toUserInfo() (*auth.UserInfo, error) {
 	if len(g.Names) < 1 {
 		return nil, errors.New("names empty array")
 	}
@@ -103,7 +103,7 @@ func (g *AuthorizedUserInfo) toAuthorizedUserInfo() (*auth.AuthorizedUserInfo, e
 	gYear := strconv.FormatInt(g.Birthdays[0].Date.Year, 10)
 	t, _ := time.Parse("01022006", gMonth + gDay + gYear)
 
-	return &auth.AuthorizedUserInfo{
+	return &auth.UserInfo{
 		ID:       g.Names[0].Metadata.Source.ID,
 		AuthType: "Google",
 		Email:    g.EmailAddresses[0].Value,

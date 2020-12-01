@@ -25,7 +25,7 @@ func init() {
 	}
 }
 
-func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
+func GetUserInfo(state string, code string) (*auth.UserInfo, error) {
 	if state != "pseudo-random" {
 		return nil, fmt.Errorf("invalid oauth state")
 	}
@@ -45,5 +45,5 @@ func GetUserInfo(state string, code string) (*auth.AuthorizedUserInfo, error) {
 	fmt.Println(string(contents))
 	facebookUserInfo := AuthorizedUserInfo{}
 	err = json.Unmarshal(contents, &facebookUserInfo)
-	return facebookUserInfo.toAuthorizedUserInfo(), nil
+	return facebookUserInfo.toUserInfo(), nil
 }
