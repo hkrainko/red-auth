@@ -15,7 +15,7 @@ func NewAuthUseCase(repo auth.Repo) auth.UseCase {
 	}
 }
 
-func (a authUseCase) HandleAuthCallBack(ctx context.Context, authCallBack auth.CallBack) (*auth.AuthorizedUserInfo, error) {
+func (a authUseCase) HandleAuthCallBack(ctx context.Context, authCallBack auth.CallBack) (*auth.UserInfo, error) {
 	userInfo, err := a.authRepo.GetAuthorizedUserInfo(ctx, authCallBack)
 	if err != nil {
 		return nil, err
