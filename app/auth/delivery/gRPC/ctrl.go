@@ -39,8 +39,9 @@ func (a AuthController) CallBack(ctx context.Context, request *pb.CallBackReques
 	return &pb.CallBackResponse{
 		Id:       info.ID,
 		AuthType: info.AuthType,
+		Name:     info.Name,
 		Email:    info.Email,
-		Birthday: info.Birthday.Format("20160102"),
+		Birthday: info.Birthday.Format("20060102"),
 		Gender:   info.Gender,
 		PhotoUrl: info.PhotoURL,
 	}, nil

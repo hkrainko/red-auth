@@ -41,6 +41,7 @@ func (g *AuthorizedUserInfo) toUserInfo() *auth.UserInfo {
 	return &auth.UserInfo{
 		ID:       g.ID,
 		AuthType: "Facebook",
+		Name:     g.Name,
 		Email:    g.Email,
 		Birthday: t,
 		Gender:   gender,

@@ -13,7 +13,7 @@ type AuthorizedUserInfo struct {
 	Etag           string         `json:"etag"`
 	Names          []Name         `json:"names"`
 	Photos         []Photo        `json:"photos"`
-	Genders        []Gender        `json:"genders"`
+	Genders        []Gender       `json:"genders"`
 	Birthdays      []Birthday     `json:"birthdays"`
 	EmailAddresses []EmailAddress `json:"emailAddresses"`
 }
@@ -30,8 +30,8 @@ type Date struct {
 }
 
 type Gender struct {
-	FormattedValue string           `json:"formattedValue"`
-	Value          string           `json:"value"`
+	FormattedValue string `json:"formattedValue"`
+	Value          string `json:"value"`
 }
 
 type BirthdayMetadata struct {
@@ -70,7 +70,6 @@ type Photo struct {
 	Default  bool             `json:"default"`
 }
 
-
 func (g *AuthorizedUserInfo) toUserInfo() (*auth.UserInfo, error) {
 	if len(g.Names) < 1 {
 		return nil, errors.New("names empty array")
@@ -101,14 +100,15 @@ func (g *AuthorizedUserInfo) toUserInfo() (*auth.UserInfo, error) {
 	gDay := leftPad2Len(strconv.FormatInt(g.Birthdays[0].Date.Day, 10), "0", 2)
 	gMonth := leftPad2Len(strconv.FormatInt(g.Birthdays[0].Date.Month, 10), "0", 2)
 	gYear := strconv.FormatInt(g.Birthdays[0].Date.Year, 10)
-	t, _ := time.Parse("01022006", gMonth + gDay + gYear)
+	t, _ := time.Parse("01022006", gMonth+gDay+gYear)
 
 	return &auth.UserInfo{
 		ID:       g.Names[0].Metadata.Source.ID,
 		AuthType: "Google",
+		Name:     g.Names[0].DisplayName,
 		Email:    g.EmailAddresses[0].Value,
 		Birthday: t,
-		Gender: gender,
+		Gender:   gender,
 		PhotoURL: g.Photos[0].URL,
 	}, nil
 }
