@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	call_back "red-auth/app/auth/delivery/call-back"
 	"red-auth/app/auth/delivery/get-auth-url"
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 )
 
 type AuthController struct{

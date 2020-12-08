@@ -1,7 +1,7 @@
 package call_back
 
 import (
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 	"time"
 )
 

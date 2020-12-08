@@ -2,7 +2,7 @@ package gRPC
 
 import (
 	"context"
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 	pb "red-auth/proto"
 )
 

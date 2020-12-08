@@ -1,7 +1,7 @@
 package facebook
 
 import (
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 	"time"
 )
 

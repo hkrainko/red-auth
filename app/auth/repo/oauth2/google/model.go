@@ -2,7 +2,7 @@ package google
 
 import (
 	"errors"
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 	"strconv"
 	"strings"
 	"time"

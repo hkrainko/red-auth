@@ -8,7 +8,7 @@ import (
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
 	"net/http"
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 )
 
 var (

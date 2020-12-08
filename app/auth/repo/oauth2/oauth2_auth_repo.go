@@ -4,7 +4,7 @@ import (
 	"context"
 	"red-auth/app/auth/repo/oauth2/facebook"
 	"red-auth/app/auth/repo/oauth2/google"
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 )
 
 

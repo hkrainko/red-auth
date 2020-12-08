@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"red-auth/app/domain/auth"
+	"red-auth/domain/auth"
 )
 
 type authUseCase struct {
