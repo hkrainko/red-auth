@@ -14,7 +14,7 @@ type Response struct {
 	PhotoURL string    `json:"picture"`
 }
 
-func NewResponse(info *auth.AuthorizedUserInfo) *Response {
+func NewResponse(info *auth.UserInfo) *Response {
 	return &Response{
 		ID:       info.ID,
 		AuthType: info.AuthType,
