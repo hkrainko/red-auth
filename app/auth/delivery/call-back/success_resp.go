@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Response struct {
+type SuccessResponse struct {
 	ID       string    `json:"id"`
 	AuthType string    `json:"authType"`
 	Email    string    `json:"email"`
@@ -14,8 +14,8 @@ type Response struct {
 	PhotoURL string    `json:"picture"`
 }
 
-func NewResponse(info *auth.UserInfo) *Response {
-	return &Response{
+func NewSuccessResponse(info *auth.UserInfo) *SuccessResponse {
+	return &SuccessResponse{
 		ID:       info.ID,
 		AuthType: info.AuthType,
 		Email:    info.Email,

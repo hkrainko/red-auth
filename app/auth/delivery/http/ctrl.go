@@ -46,5 +46,5 @@ func (a AuthController) CallBack(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, call_back.NewResponse(userInfo))
+	c.JSON(200, call_back.NewSuccessResponse(userInfo))
 }
