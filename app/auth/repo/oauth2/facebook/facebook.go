@@ -17,7 +17,7 @@ var (
 
 func init() {
 	OauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:9001/auth/authCallback?auth_type=Facebook",
+		RedirectURL:  "http://localhost:8000/auth/callback?auth_type=Facebook",
 		ClientID:     "375183940527894",
 		ClientSecret: "d90ae5b9183d30d3cc206c2286b15e90",
 		Scopes:       []string{"public_profile", "user_birthday", "email", "user_gender"},
