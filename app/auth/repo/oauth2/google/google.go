@@ -17,7 +17,7 @@ var (
 
 func init() {
 	OauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:8000/auth/callback?auth_type=Google",
+		RedirectURL:  "http://localhost:4201/auth?auth_type=Google",
 		ClientID:     "601833756814-1n1uo2jp77sp888mjsrsl1fmru69kvhb.apps.googleusercontent.com",
 		ClientSecret: "yyZUseQoTSYS8tT0MP-M9MrL",
 		Scopes: []string{
