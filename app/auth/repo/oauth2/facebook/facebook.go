@@ -11,25 +11,27 @@ import (
 	"red-auth/domain/auth"
 )
 
-var (
+type OAuth struct {
 	OauthConfig *oauth2.Config
-)
+}
 
-func init() {
-	OauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:4201/auth?auth_type=Facebook",
-		ClientID:     "375183940527894",
-		ClientSecret: "d90ae5b9183d30d3cc206c2286b15e90",
-		Scopes:       []string{"public_profile", "user_birthday", "email", "user_gender"},
-		Endpoint:     facebook.Endpoint,
+func InitFacebookOAuth(redirectURL string, clientID string, clientSecret string) OAuth {
+	return OAuth{
+		OauthConfig: &oauth2.Config{
+			RedirectURL:  redirectURL,
+			ClientID:     clientID,
+			ClientSecret: clientSecret,
+			Scopes:       []string{"public_profile", "user_birthday", "email", "user_gender"},
+			Endpoint:     facebook.Endpoint,
+		},
 	}
 }
 
-func GetUserInfo(state string, code string) (*auth.UserInfo, error) {
+func (o OAuth) GetUserInfo(state string, code string) (*auth.UserInfo, error) {
 	if state != "pseudo-random" {
 		return nil, fmt.Errorf("invalid oauth state")
 	}
-	token, err := OauthConfig.Exchange(context.Background(), code)
+	token, err := o.OauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
@@ -46,4 +48,8 @@ func GetUserInfo(state string, code string) (*auth.UserInfo, error) {
 	facebookUserInfo := AuthorizedUserInfo{}
 	err = json.Unmarshal(contents, &facebookUserInfo)
 	return facebookUserInfo.toUserInfo(), nil
+}
+
+func (o OAuth) GetAuthUrl() string {
+	return o.OauthConfig.AuthCodeURL("pseudo-random")
 }

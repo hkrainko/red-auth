@@ -6,6 +6,12 @@ import (
 
 type Type string
 
+const (
+	AuthTypeFacebook = "Facebook"
+	AuthTypeTwitter  = "Twitter"
+	AuthTypeGoogle   = "Google"
+)
+
 type AuthError struct {
 	msg string
 	err error
@@ -31,7 +37,3 @@ func NewAuthTypeNotFoundError() *AuthTypeNotFoundError {
 		},
 	}
 }
-
-
-
-

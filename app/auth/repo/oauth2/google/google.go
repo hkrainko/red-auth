@@ -11,30 +11,32 @@ import (
 	"red-auth/domain/auth"
 )
 
-var (
+type OAuth struct {
 	OauthConfig *oauth2.Config
-)
+}
 
-func init() {
-	OauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:4201/auth?auth_type=Google",
-		ClientID:     "601833756814-1n1uo2jp77sp888mjsrsl1fmru69kvhb.apps.googleusercontent.com",
-		ClientSecret: "yyZUseQoTSYS8tT0MP-M9MrL",
-		Scopes: []string{
-			"https://www.googleapis.com/auth/userinfo.email",
-			"https://www.googleapis.com/auth/userinfo.profile",
-			"https://www.googleapis.com/auth/user.birthday.read",
-			"https://www.googleapis.com/auth/user.gender.read",
+func InitGoogleOAuth(redirectURL string, clientID string, clientSecret string) OAuth {
+	return OAuth {
+		OauthConfig: &oauth2.Config{
+			RedirectURL:  redirectURL,
+			ClientID:     clientID,
+			ClientSecret: clientSecret,
+			Scopes: []string{
+				"https://www.googleapis.com/auth/userinfo.email",
+				"https://www.googleapis.com/auth/userinfo.profile",
+				"https://www.googleapis.com/auth/user.birthday.read",
+				"https://www.googleapis.com/auth/user.gender.read",
+			},
+			Endpoint: google.Endpoint,
 		},
-		Endpoint: google.Endpoint,
 	}
 }
 
-func GetUserInfo(state string, code string) (*auth.UserInfo, error) {
+func (o OAuth)GetUserInfo(state string, code string) (*auth.UserInfo, error) {
 	if state != "pseudo-random" {
 		return nil, fmt.Errorf("invalid oauth state")
 	}
-	token, err := OauthConfig.Exchange(context.Background(), code)
+	token, err := o.OauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
@@ -56,4 +58,8 @@ func GetUserInfo(state string, code string) (*auth.UserInfo, error) {
 	}
 
 	return googleUserInfo.toUserInfo()
+}
+
+func (o OAuth) GetAuthUrl() string {
+	return o.OauthConfig.AuthCodeURL("pseudo-random")
 }
