@@ -30,11 +30,17 @@ func main() {
 
 	s := grpc.NewServer()
 
+	//facebookOAuthConfig := facebook.InitFacebookOAuth(
+	//	"http://localhost:3000/auth?auth_type=Facebook",
+	//	"375183940527894",
+	//	"d90ae5b9183d30d3cc206c2286b15e90",
+	//)
 	facebookOAuthConfig := facebook.InitFacebookOAuth(
 		"http://localhost:3000/auth?auth_type=Facebook",
-		"375183940527894",
-		"d90ae5b9183d30d3cc206c2286b15e90",
+		"873294516591128",
+		"8463a018e8cb6249abadcab651e2b277",
 	)
+
 	googleOAuthConfig := google.InitGoogleOAuth(
 		"http://localhost:3000/auth?auth_type=Google",
 		"601833756814-1n1uo2jp77sp888mjsrsl1fmru69kvhb.apps.googleusercontent.com",
